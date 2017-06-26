@@ -1,11 +1,18 @@
 # Instructions
-- `sbt assembly` to build fat jar with no logback.xml (we will override it if it exists)
-- `java -Dlogback.configurationFile=/opt/logback.xml -jar target/scala-2.12/log.jar`
-- Check out `/var/log/helix/debug.log`
+- To run this project, install [Docker](https://www.docker.com)
+- Run: `docker pull animatedlew/logger`
+- Verify logs: `docker run -it --rm animatedlew/logger cat /var/log/cota/helix/debug.log`
 
-# Docker
- - build: `docker build -t cota/helix .`
- - run: `docker run -it --rm cota/helix cat /var/log/cota/helix/debug.log`
+# Notes
+This project uses `sbt assembly` to build a fat jar that moves logback.xml into a central location. It then runs the fat jar with the new location of the logback file. e.g.
+```bash
+java -Dlogback.configurationFile=/opt/logback.xml -jar target/scala-2.12/log.jar
+```
+The classpath of files inside of `src/main/resources` does not automatically resolve.
+
+# Build & Run Locally
+ - build: `docker build -t animatedlew/logger .`
+ - run: `docker run -it --rm animatedlew/logger cat /var/log/cota/helix/debug.log`
 
 # Example logback.xml
 ```xml
@@ -24,7 +31,6 @@
 		</encoder>
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<!-- rollover daily -->
 			<fileNamePattern>${DEV_HOME}/archived/debug.%d{yyyy-MM-dd}.%i.log
                         </fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy

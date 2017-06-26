@@ -1,10 +1,12 @@
 # A Logger Seed for Scala Apps
 # Lewis M.
 
+# pull automated build:
+# >> docker pull animatedlew/logger
 # build image:
-# >> docker build -t cota/helix .
+# >> docker build -t animatedlew/logger.
 # inspect log:
-# >> docker run -it --rm cota/helix cat /var/log/cota/helix/debug.log
+# >> docker run -it --rm animatedlew/logger cat /var/log/cota/helix/debug.log
 
 FROM  hseeberger/scala-sbt:latest
 
@@ -21,7 +23,6 @@ COPY src/main/resources/logback.xml /opt/cota/helix
 
 WORKDIR /root/helix
 
-# TODO: pull latest project from github instead of copying from current directory
 COPY . /root/helix
 RUN sbt assembly
 
